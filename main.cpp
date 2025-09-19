@@ -17,52 +17,15 @@ using namespace std::chrono;
  *
  */
 
-void question1(string input_file, string output_file)
-{
-    vector<vector<int>> parcels;
-    // read from input file
-    question1_reader(input_file, parcels);
-
-    auto start = high_resolution_clock::now();
-
-    vector<vector<int>> output =  question_one(parcels);
-
-    auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(stop - start);
-    auto computeDuration = duration.count();
-    std::cout << "Time taken by function: " << duration.count() << " microseconds" << endl;
-    std::cout << "Total time taken: " << computeDuration << " microseconds" << endl;
-
-    // Simple memory usage (Linux only)
-    std::ifstream stat_stream("/proc/self/status");
-    std::string line;
-    while (std::getline(stat_stream, line)) {
-        if (line.find("VmRSS:") == 0) {
-            std::cout << "Memory usage (VmRSS): " << line.substr(6) << std::endl;
-            break;
-        }
-    }
-
-    // save output to output_file
-    question1_writer(output_file, output);
-
-}
-
-/**
- * @brief Do not modify this code.
- *
- */
-// void question2(string input_file, string output_file)
+// void question1(string input_file, string output_file)
 // {
-
-//     vector<int> preorder, inorder;
-//     vector<vector<int>> leaf_parcels, queries;
+//     vector<vector<int>> parcels;
 //     // read from input file
-//     question2_reader(input_file, preorder, inorder, leaf_parcels, queries);
+//     question1_reader(input_file, parcels);
 
 //     auto start = high_resolution_clock::now();
 
-//     vector<int> output =  question_two(preorder, inorder, leaf_parcels, queries);
+//     vector<vector<int>> output =  question_one(parcels);
 
 //     auto stop = high_resolution_clock::now();
 //     auto duration = duration_cast<microseconds>(stop - start);
@@ -79,11 +42,49 @@ void question1(string input_file, string output_file)
 //             break;
 //         }
 //     }
-   
-//     // write output to file
-//     question2_writer(output_file, output);
+
+//     // save output to output_file
+//     question1_writer(output_file, output);
 
 // }
+
+/**
+ * @brief Do not modify this code.
+ *
+ */
+
+void question2(string input_file, string output_file)
+{
+
+    vector<int> preorder, inorder;
+    vector<vector<int>> leaf_parcels, queries;
+    // read from input file
+    question2_reader(input_file, preorder, inorder, leaf_parcels, queries);
+
+    auto start = high_resolution_clock::now();
+
+    vector<int> output =  question_two(preorder, inorder, leaf_parcels, queries);
+
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    auto computeDuration = duration.count();
+    std::cout << "Time taken by function: " << duration.count() << " microseconds" << endl;
+    std::cout << "Total time taken: " << computeDuration << " microseconds" << endl;
+
+    // Simple memory usage (Linux only)
+    std::ifstream stat_stream("/proc/self/status");
+    std::string line;
+    while (std::getline(stat_stream, line)) {
+        if (line.find("VmRSS:") == 0) {
+            std::cout << "Memory usage (VmRSS): " << line.substr(6) << std::endl;
+            break;
+        }
+    }
+   
+    // write output to file
+    question2_writer(output_file, output);
+
+}
 
 
 /**
@@ -140,16 +141,16 @@ void question1(string input_file, string output_file)
 
 int main(int argc, char **argv) 
 {
-    string question1_input_file = argv[1];
-    string question1_output_file = argv[2];
-    // string question2_input_file = argv[1]; // change later to argv[3]
-    // string question2_output_file = argv[2];
+    // string question1_input_file = argv[1];
+    // string question1_output_file = argv[2];
+    string question2_input_file = argv[1]; // change later to argv[3]
+    string question2_output_file = argv[2];
     // string question3_input_file = argv[1]; // change later to argv[5]
     // string question3_output_file = argv[2];
 
-    question1(question1_input_file, question1_output_file);
+    // question1(question1_input_file, question1_output_file);
 
-    // question2(question2_input_file, question2_output_file);
+    question2(question2_input_file, question2_output_file);
 
     // question3(question3_input_file, question3_output_file);
 

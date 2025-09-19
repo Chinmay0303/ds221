@@ -27,34 +27,34 @@ using namespace std;
 // Traverse the list, for each parcel ID, store the count and minimum weight in a hash map.
 // After traversal, collect IDs with count > 1 and their minimum weights, then sort by ID.
 
-vector<vector<int>> question_one(const vector<vector<int>>& parcels) {
-    unordered_map<int, pair<int, int>> parcel_map;  // ID -> (count, min_weight)
+// vector<vector<int>> question_one(const vector<vector<int>>& parcels) {
+//     unordered_map<int, pair<int, int>> parcel_map;  // ID -> (count, min_weight)
 
-    for (const auto& parcel : parcels) {
-        int id = parcel[0];
-        int weight = parcel[1];
+//     for (const auto& parcel : parcels) {
+//         int id = parcel[0];
+//         int weight = parcel[1];
 
-        if (parcel_map.find(id) == parcel_map.end()) {
-            parcel_map[id] = {1, weight};  // First occurrence
-        } else {
-            parcel_map[id].first++;  // Increment count
-            parcel_map[id].second = min(parcel_map[id].second, weight);  // Update min weight
-        }
-    }
+//         if (parcel_map.find(id) == parcel_map.end()) {
+//             parcel_map[id] = {1, weight};  // First occurrence
+//         } else {
+//             parcel_map[id].first++;  // Increment count
+//             parcel_map[id].second = min(parcel_map[id].second, weight);  // Update min weight
+//         }
+//     }
 
-    vector<vector<int>> result;
-    for (const auto& entry : parcel_map) {
-        if (entry.second.first > 1) {  // Count > 1
-            result.push_back({entry.first, entry.second.second});
-        }
-    }
+//     vector<vector<int>> result;
+//     for (const auto& entry : parcel_map) {
+//         if (entry.second.first > 1) {  // Count > 1
+//             result.push_back({entry.first, entry.second.second});
+//         }
+//     }
 
-    // Sort by ID
-    sort(result.begin(), result.end());
+//     // Sort by ID
+//     sort(result.begin(), result.end());
 
-    return result;
-    // return parcels;
-}
+//     return result;
+//     // return parcels;
+// }
 
 // Now Write a function based on the below approach and algorithm:
 // Approach:
@@ -101,143 +101,143 @@ vector<vector<int>> question_one(const vector<vector<int>>& parcels) {
 // Now give the optimised approach and algorithm to solve this problem in steps
 // Okay now complete this function and give the best code according to the above discussion:
 
-// vector<int> question_two(
-//     const vector<int>& preorder,
-//     const vector<int>& inorder,
-//     const vector<vector<int>>& leafParcels,
-//     const vector<vector<int>>& query
-// ) {
-//     int n = preorder.size();
-//     if (n == 0) return {};
+vector<int> question_two(
+    const vector<int>& preorder,
+    const vector<int>& inorder,
+    const vector<vector<int>>& leafParcels,
+    const vector<vector<int>>& query
+) {
+    int n = preorder.size();
+    if (n == 0) return {};
     
-//     // Step 1: Build tree structure and create level-order mapping
-//     struct TreeNode {
-//         int val;
-//         TreeNode* left;
-//         TreeNode* right;
-//         TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-//     };
+    // Step 1: Build tree structure and create level-order mapping
+    struct TreeNode {
+        int val;
+        TreeNode* left;
+        TreeNode* right;
+        TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    };
     
-//     // Helper function to build tree from preorder and inorder
-//     unordered_map<int, int> inorder_map;
-//     for (int i = 0; i < inorder.size(); i++) {
-//         inorder_map[inorder[i]] = i;
-//     }
+    // Helper function to build tree from preorder and inorder
+    unordered_map<int, int> inorder_map;
+    for (int i = 0; i < inorder.size(); i++) {
+        inorder_map[inorder[i]] = i;
+    }
     
-//     function<TreeNode*(int, int, int)> buildTree = [&](int pre_idx, int in_start, int in_end) -> TreeNode* {
-//         if (in_start > in_end) return nullptr;
+    function<TreeNode*(int, int, int)> buildTree = [&](int pre_idx, int in_start, int in_end) -> TreeNode* {
+        if (in_start > in_end) return nullptr;
         
-//         TreeNode* root = new TreeNode(preorder[pre_idx]);
-//         int in_idx = inorder_map[preorder[pre_idx]];
+        TreeNode* root = new TreeNode(preorder[pre_idx]);
+        int in_idx = inorder_map[preorder[pre_idx]];
         
-//         root->left = buildTree(pre_idx + 1, in_start, in_idx - 1);
-//         root->right = buildTree(pre_idx + 1 + (in_idx - in_start), in_idx + 1, in_end);
+        root->left = buildTree(pre_idx + 1, in_start, in_idx - 1);
+        root->right = buildTree(pre_idx + 1 + (in_idx - in_start), in_idx + 1, in_end);
         
-//         return root;
-//     };
+        return root;
+    };
     
-//     TreeNode* root = buildTree(0, 0, n - 1);
+    TreeNode* root = buildTree(0, 0, n - 1);
     
-//     // Step 2: Create level-order mapping (node value -> level-order index)
-//     unordered_map<int, int> levelOrderIndex;
-//     queue<pair<TreeNode*, int>> q;
-//     q.push({root, 0});
+    // Step 2: Create level-order mapping (node value -> level-order index)
+    unordered_map<int, int> levelOrderIndex;
+    queue<pair<TreeNode*, int>> q;
+    q.push({root, 0});
     
-//     while (!q.empty()) {
-//         auto [node, idx] = q.front();
-//         q.pop();
+    while (!q.empty()) {
+        auto [node, idx] = q.front();
+        q.pop();
         
-//         levelOrderIndex[node->val] = idx;
+        levelOrderIndex[node->val] = idx;
         
-//         if (node->left) q.push({node->left, 2 * idx + 1});
-//         if (node->right) q.push({node->right, 2 * idx + 2});
-//     }
+        if (node->left) q.push({node->left, 2 * idx + 1});
+        if (node->right) q.push({node->right, 2 * idx + 2});
+    }
     
-//     // Step 3: Identify leaf nodes and their level-order indices
-//     vector<int> leafNodes;
-//     function<void(TreeNode*)> findLeaves = [&](TreeNode* node) {
-//         if (!node) return;
-//         if (!node->left && !node->right) {
-//             leafNodes.push_back(node->val);
-//         }
-//         findLeaves(node->left);
-//         findLeaves(node->right);
-//     };
-//     findLeaves(root);
+    // Step 3: Identify leaf nodes and their level-order indices
+    vector<int> leafNodes;
+    function<void(TreeNode*)> findLeaves = [&](TreeNode* node) {
+        if (!node) return;
+        if (!node->left && !node->right) {
+            leafNodes.push_back(node->val);
+        }
+        findLeaves(node->left);
+        findLeaves(node->right);
+    };
+    findLeaves(root);
     
-//     // Step 4: Build parcel sets for each node (bottom-up propagation)
-//     unordered_map<int, unordered_set<int>> nodeParcels;
+    // Step 4: Build parcel sets for each node (bottom-up propagation)
+    unordered_map<int, unordered_set<int>> nodeParcels;
     
-//     // Initialize leaf nodes with their parcels
-//     for (int i = 0; i < leafNodes.size() && i < leafParcels.size(); i++) {
-//         for (int parcel : leafParcels[i]) {
-//             nodeParcels[leafNodes[i]].insert(parcel);
-//         }
-//     }
+    // Initialize leaf nodes with their parcels
+    for (int i = 0; i < leafNodes.size() && i < leafParcels.size(); i++) {
+        for (int parcel : leafParcels[i]) {
+            nodeParcels[leafNodes[i]].insert(parcel);
+        }
+    }
     
-//     // Post-order traversal to propagate parcels upward
-//     function<void(TreeNode*)> propagateParcels = [&](TreeNode* node) {
-//         if (!node) return;
+    // Post-order traversal to propagate parcels upward
+    function<void(TreeNode*)> propagateParcels = [&](TreeNode* node) {
+        if (!node) return;
         
-//         propagateParcels(node->left);
-//         propagateParcels(node->right);
+        propagateParcels(node->left);
+        propagateParcels(node->right);
         
-//         // If it's an internal node, merge parcels from children
-//         if (node->left || node->right) {
-//             if (node->left) {
-//                 for (int parcel : nodeParcels[node->left->val]) {
-//                     nodeParcels[node->val].insert(parcel);
-//                 }
-//             }
-//             if (node->right) {
-//                 for (int parcel : nodeParcels[node->right->val]) {
-//                     nodeParcels[node->val].insert(parcel);
-//                 }
-//             }
-//         }
-//     };
-//     propagateParcels(root);
+        // If it's an internal node, merge parcels from children
+        if (node->left || node->right) {
+            if (node->left) {
+                for (int parcel : nodeParcels[node->left->val]) {
+                    nodeParcels[node->val].insert(parcel);
+                }
+            }
+            if (node->right) {
+                for (int parcel : nodeParcels[node->right->val]) {
+                    nodeParcels[node->val].insert(parcel);
+                }
+            }
+        }
+    };
+    propagateParcels(root);
     
-//     // Step 5: Process queries
-//     vector<int> results;
+    // Step 5: Process queries
+    vector<int> results;
     
-//     for (const auto& queryList : query) {
-//         int bestNode = -1;
-//         int bestIndex = -1;
+    for (const auto& queryList : query) {
+        int bestNode = -1;
+        int bestIndex = -1;
         
-//         // DFS to find the highest-indexed node containing all query parcels
-//         function<void(TreeNode*)> findBestNode = [&](TreeNode* node) {
-//             if (!node) return;
+        // DFS to find the highest-indexed node containing all query parcels
+        function<void(TreeNode*)> findBestNode = [&](TreeNode* node) {
+            if (!node) return;
             
-//             // Check if current node contains all query parcels
-//             bool containsAll = true;
-//             for (int parcel : queryList) {
-//                 if (nodeParcels[node->val].find(parcel) == nodeParcels[node->val].end()) {
-//                     containsAll = false;
-//                     break;
-//                 }
-//             }
+            // Check if current node contains all query parcels
+            bool containsAll = true;
+            for (int parcel : queryList) {
+                if (nodeParcels[node->val].find(parcel) == nodeParcels[node->val].end()) {
+                    containsAll = false;
+                    break;
+                }
+            }
             
-//             if (containsAll) {
-//                 int currentIndex = levelOrderIndex[node->val];
-//                 if (currentIndex > bestIndex) {
-//                     bestIndex = currentIndex;
-//                     bestNode = node->val;
-//                 }
+            if (containsAll) {
+                int currentIndex = levelOrderIndex[node->val];
+                if (currentIndex > bestIndex) {
+                    bestIndex = currentIndex;
+                    bestNode = node->val;
+                }
                 
-//                 // Continue searching in children for potentially higher-indexed nodes
-//                 findBestNode(node->left);
-//                 findBestNode(node->right);
-//             }
-//             // If current node doesn't contain all parcels, no need to check children
-//         };
+                // Continue searching in children for potentially higher-indexed nodes
+                findBestNode(node->left);
+                findBestNode(node->right);
+            }
+            // If current node doesn't contain all parcels, no need to check children
+        };
         
-//         findBestNode(root);
-//         results.push_back(bestIndex);
-//     }
+        findBestNode(root);
+        results.push_back(bestIndex);
+    }
     
-//     return results;
-// }
+    return results;
+}
 
 
 
