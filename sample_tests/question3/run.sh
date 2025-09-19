@@ -13,9 +13,9 @@
 # Your commands to run your code should be here
 
 # write the bash script to compile and run the code gen_inp.cpp
-g++ gen_inp.cpp -o gen_inp -std=c++17
+g++ gen_inp_simple.cpp -o gen_inp_sim -std=c++17
 # run the code to generate test cases
-./gen_inp
+./gen_inp_sim
 
 # compile the main.cpp file
 g++ ../../main.cpp -o main -std=c++17 
