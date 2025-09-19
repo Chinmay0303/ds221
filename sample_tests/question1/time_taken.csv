@@ -1,0 +1,5 @@
+Input Size,Time Taken (microseconds),Memory usage(kB)
+1,22,3328
+10,14,3328
+100,73,3456
+1000,1376,3456

@@ -48,17 +48,18 @@ void generate_test_case(const string& filename, int n, int max_id, int max_weigh
 int main() {
     // Test case parameters
     // give 100 sizes
-    vector<int> sizes = {10,100,1000}; // You can add larger sizes for stress testing
-    for (int i = 10000; i < 1010000; i=i+10000) {
-        sizes.push_back(i); // from 100k to 10M
-    }
+    vector<int> sizes = {1,10,100,1000}; // You can add larger sizes for stress testing
+    // for (int i = 10000; i < 1010000; i=i+10000) {
+    //     sizes.push_back(i); // from 100k to 10M
+    // }
+    // sizes.push_back(10000000); // 10 million
     int max_id = 1000000;
     int max_weight = 1000000;
 
     for (size_t i = 0; i < sizes.size(); ++i) {
         //change filename to store in sample_tests/question1
 
-        string filename = "./sample_tests/question1/test_case_" + to_string(i+1) + ".txt";
+        string filename = "test_case_" + to_string(i+1) + ".txt";
 
         int duplicate_count;
 

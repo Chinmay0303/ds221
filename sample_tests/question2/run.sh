@@ -13,12 +13,12 @@
 # Your commands to run your code should be here
 
 # write the bash script to compile and run the code gen_inp.cpp
-g++ sample_tests/question1/gen_inp.cpp -o gen_inp
+g++ gen_inp.cpp -o gen_inp
 # run the code 
-./gen_inp
+./gen_inp all
 
 # compile the main.cpp file
-g++ main.cpp -o main 
+g++ ../../main.cpp -o main 
 
 echo "Input Size,Time Taken (microseconds),Memory usage(kB)" > time_taken.csv
 
@@ -27,18 +27,21 @@ echo "Input Size,Time Taken (microseconds),Memory usage(kB)" > time_taken.csv
 for i in $(seq 1 $1)
 do
   echo "Running test case $i"
-  output=$(./main "./sample_tests/question1/test_case_$i.txt" "./sample_tests/question1/output_$i.txt")
+  output=$(./main "./test_case_$i.txt" "./output_$i.txt")
   echo "$output"
-  input_size=$(wc -l < "./sample_tests/question1/test_case_$i.txt")
-  input_size=$((input_size - 1)) # subtract 1 for the first line, if needed
+  input_size=$(grep '^preorder:' "./test_case_$i.txt" | sed 's/preorder://g' | wc -w)
 
-  # output=$(./main "./sample_tests/question1/test_case_$i.txt" "./sample_tests/question1/output_$i.txt" 2>&1)
   total_time=$(echo "$output" | grep -oP 'Total time taken: \K[0-9]+')
   memory_used=$(echo "$output" | grep -oP 'Memory usage \(VmRSS\):\s*\K[0-9]+')
 
   echo "$input_size,$total_time,$memory_used" >> time_taken.csv
 done
 
+# for file in test_case_*.txt; do
+#     # Extract the preorder line, remove 'preorder:', count the numbers
+#     size=$(grep '^preorder:' "$file" | sed 's/preorder://g' | wc -w)
+#     echo "$file: $size"
+# done
 
 
 
