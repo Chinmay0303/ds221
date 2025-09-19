@@ -16,7 +16,7 @@
 
 using namespace std;
 
-
+// 1
 // 1- Complete this function
 // Abstract this question into math:
 // Now give the optimised approach and algorithm to solve this problem in steps
